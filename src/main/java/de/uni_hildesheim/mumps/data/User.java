@@ -5,37 +5,37 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
-import java.util.Set;
+import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 
 @Entity
-public class User {
+public class User implements Serializable {
 
     @Id
     private String userID;
 
     private String eMail;
 
-    private boolean isLecturer;
-
     private int points;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    private Set<Course> enlistedCourses; //course id's
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<Course> enlistedCourses; //course id's
 
     protected User() {
-
+        enlistedCourses = new LinkedList<Course>();
     }
 
-    public User(String userID, String eMail, boolean isLecturer, int points, Set<Course> enlistedCourses) {
+    public User(String userID, String eMail, int points, List<Course> enlistedCourses) {
         this.userID = userID;
         this.eMail = eMail;
-        this.isLecturer = isLecturer;
         this.points = points;
         this.enlistedCourses = enlistedCourses;
     }
 
     public User(String userID) {
         this.userID = userID;
+        enlistedCourses = new LinkedList<Course>();
     }
 
 
@@ -55,14 +55,6 @@ public class User {
         this.eMail = eMail;
     }
 
-    public boolean isLecturer() {
-        return isLecturer;
-    }
-
-    public void setLecturer(boolean lecturer) {
-        isLecturer = lecturer;
-    }
-
     public int getPoints() {
         return points;
     }
@@ -71,11 +63,11 @@ public class User {
         this.points = points;
     }
 
-    public Set<Course> getEnlistedCourses() {
+    public List<Course> getEnlistedCourses() {
         return enlistedCourses;
     }
 
-    public void setEnlistedCourses(Set<Course> enlistedCourses) {
+    public void setEnlistedCourses(List<Course> enlistedCourses) {
         this.enlistedCourses = enlistedCourses;
     }
 }

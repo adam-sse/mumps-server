@@ -54,7 +54,7 @@ public class CourseController {
     @PostMapping(path = "/course", consumes = MediaType.APPLICATION_JSON_VALUE)
     public CourseDto createNewCourse(@RequestBody @Valid NewCourseDto dto) {
         LOG.info(() -> "Creating new course " + dto);
-        Course course = new Course(dto.name());
+        Course course = new Course(dto.name(), dto.owner());
         course.setRewardPerEvent(dto.rewardPerEvent());
         course = courseRepository.saveAndFlush(course);
         return new CourseDto(course);

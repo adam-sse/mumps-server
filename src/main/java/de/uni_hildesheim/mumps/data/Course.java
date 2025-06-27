@@ -18,7 +18,9 @@ public class Course {
     private long id;
     
     private String name;
-    
+
+    private User owner;
+
     private int rewardPerEvent;
 
     @OneToMany(fetch = FetchType.EAGER)
@@ -28,8 +30,9 @@ public class Course {
     protected Course() {
     }
     
-    public Course(String name) {
+    public Course(String name, User owner) {
         this.name = name;
+        this.owner = owner;
         this.rewardPerEvent = 1;
         this.events = new LinkedList<>();
     }
@@ -45,7 +48,15 @@ public class Course {
     public void setName(String name) {
         this.name = name;
     }
-    
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwnerID(User owner) {
+        this.owner = owner;
+    }
+
     public int getRewardPerEvent() {
         return rewardPerEvent;
     }
