@@ -35,7 +35,7 @@ public class User implements Serializable {
 
     public User(String userID) {
         this.userID = userID;
-        enlistedCourses = new LinkedList<Course>();
+        enlistedCourses = new LinkedList<>();
     }
 
 

@@ -3,7 +3,6 @@ package de.uni_hildesheim.mumps.controllers;
 import de.uni_hildesheim.mumps.data.*;
 import de.uni_hildesheim.mumps.dto.NewUserDto;
 import de.uni_hildesheim.mumps.dto.UserDto;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -54,7 +53,7 @@ public class UserController {
         List<UserDto> leaderboard = new LinkedList<>(unsortedList);
         leaderboard.sort(Comparator.comparingInt(UserDto::points));
 
-        return new LinkedList<UserDto>(leaderboard);
+        return new LinkedList<>(leaderboard);
     }
 
     @PostMapping(path = "/users", consumes = MediaType.APPLICATION_JSON_VALUE)

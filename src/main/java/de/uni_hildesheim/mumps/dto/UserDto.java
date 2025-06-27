@@ -1,6 +1,5 @@
 package de.uni_hildesheim.mumps.dto;
 
-import de.uni_hildesheim.mumps.data.Course;
 import de.uni_hildesheim.mumps.data.User;
 
 import java.util.List;

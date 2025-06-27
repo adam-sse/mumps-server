@@ -4,7 +4,6 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 import de.uni_hildesheim.mumps.data.Event;
-import de.uni_hildesheim.mumps.data.User;
 
 public record EventDto(long id, ZonedDateTime startTime, List<UserDto> visitors) {
 
