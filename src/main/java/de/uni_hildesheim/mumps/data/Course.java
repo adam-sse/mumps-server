@@ -7,6 +7,7 @@ import java.util.List;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Course {
@@ -18,7 +19,8 @@ public class Course {
     private String name;
     
     private int rewardPerEvent;
-    
+
+    @OneToMany
     private List<Event> events;
     
     // for JPA
