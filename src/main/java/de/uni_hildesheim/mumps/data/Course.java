@@ -31,6 +31,10 @@ public class Course {
         this.events = new LinkedList<>();
     }
     
+    public long getId() {
+        return id;
+    }
+    
     public String getName() {
         return name;
     }

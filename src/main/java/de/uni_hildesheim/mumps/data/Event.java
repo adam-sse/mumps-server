@@ -18,6 +18,10 @@ public class Event {
     // for JPA
     protected Event() {
     }
+    
+    public long getId() {
+        return id;
+    }
 
     public Event(ZonedDateTime startTime) {
         this.startTime = startTime;
