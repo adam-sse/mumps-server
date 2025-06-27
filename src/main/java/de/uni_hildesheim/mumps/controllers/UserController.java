@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 @CrossOrigin(origins = "*")
 public class UserController {
 
-    private static final Logger LOG = Logger.getLogger(CourseController.class.getName());
+    private static final Logger LOG = Logger.getLogger(UserController.class.getName());
 
     @Autowired
     private UserRepository userRepository;
@@ -38,7 +38,7 @@ public class UserController {
 
     @GetMapping("/users/{userID}")
     public UserDto getUser(@PathVariable String userID) {
-        LOG.info("/user/" + userID + "called");
+        LOG.info("/user/" + userID + " called");
 
         return userRepository.findById(userID)
                 .map(UserDto::new)
@@ -47,6 +47,7 @@ public class UserController {
 
     @GetMapping("/users/leaderboard")
     public List<UserDto> getUserRanking() {
+        LOG.info("/leaderboard called");
         List<UserDto> unsortedList = userRepository.findAll().stream()
                 .map(UserDto::new)
                 .toList();
@@ -68,17 +69,42 @@ public class UserController {
         return new UserDto(user);
     }
 
+    @PutMapping("/users/{userID}/enrolled/{courseID}")
+    public UserDto enrollUserToCourse(@PathVariable String userID, @PathVariable long courseID) {
+        LOG.info("/users/" + userID + "/enrolled/" + courseID + " called");
+        User user = userRepository.findById(userID).get();
+
+        if (!user.getEnlistedCourses().contains(courseID)){
+            user.getEnlistedCourses().add(courseID);
+            user = userRepository.saveAndFlush(user);
+            LOG.info("User enrolled to course");
+        } else {
+            LOG.info("User already enrolled to course");
+        }
+
+        return new UserDto(user);
+    }
+
+    /*@PutMapping("/users/{userID}/enterLottery")
+    public UserDto userEnteredLottery(PathVariable String userID) {
+
+    }*/
+
     @PutMapping("/users/{userID}/visited/{courseID}/{eventID}")
     public UserDto userVisitedEvent(@PathVariable String userID, @PathVariable long courseID, @PathVariable long eventID){
+        LOG.info("/users/" + userID + "/visited/" + courseID + "/" + eventID + " called");
         User user = userRepository.findById(userID).get();
         Event event = eventRepository.findById(courseID).get();
+        if (event.getVisitors() == null) {
+            event.setVisitors(new LinkedList<>());
+        }
         Course course = courseRepository.findById(eventID).get();
 
         if (!event.getVisitors().contains(user.getUserID())) {
             event.getVisitors().add(user.getUserID());
             user.setPoints(user.getPoints() + course.getRewardPerEvent());
 
-            event = eventRepository.save(event);
+            event = eventRepository.saveAndFlush(event);
             user = userRepository.saveAndFlush(user);
 
             LOG.info("User: " + user.getUserID() + " visited event: " + event.getId() + " of course: " + course.getName());
