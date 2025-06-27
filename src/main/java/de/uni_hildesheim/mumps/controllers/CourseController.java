@@ -44,7 +44,7 @@ public class CourseController {
                 .orElse(null);
     }
     
-    @PostMapping
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public CourseDto createNewCourse(@Valid NewCourseDto dto) {
         Course course = new Course(dto.name());
         course.setRewardPerEvent(dto.rewardPerEvent());
