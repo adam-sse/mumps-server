@@ -23,4 +23,12 @@ public class Event {
         this.startTime = startTime;
     }
     
+    public ZonedDateTime getStartTime() {
+        return startTime;
+    }
+    
+    public void setStartTime(ZonedDateTime startTime) {
+        this.startTime = startTime;
+    }
+    
 }
