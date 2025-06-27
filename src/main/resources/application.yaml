@@ -7,4 +7,4 @@ spring:
     datasource:
         url: jdbc:sqlite:db.sqlite
         driver-class-name: org.sqlite.JDBC
-        hikari.maximum-pool-size: 1
+        #hikari.maximum-pool-size: 1
