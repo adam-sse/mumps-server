@@ -38,16 +38,16 @@ public class CourseController {
     
     @GetMapping("/course")
     public List<CourseDto> getAllCourses() {
-        LOG.info("/course called");
+        LOG.info("Retrieving all courses");
         return courseRepository.findAll().stream()
                 .map(CourseDto::new)
                 .toList();
     }
     
-    @GetMapping("/course/{id}")
-    public CourseDto getCourse(@PathVariable long id) {
-        LOG.info("/course/" + id + " called");
-        return courseRepository.findById(id)
+    @GetMapping("/course/{courseId}")
+    public CourseDto getCourse(@PathVariable long courseId) {
+        LOG.info(() -> "Retrieving course " + courseId);
+        return courseRepository.findById(courseId)
                 .map(CourseDto::new)
                 .orElse(null);
     }
@@ -55,7 +55,7 @@ public class CourseController {
     @PostMapping(path = "/course", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Transactional
     public CourseDto createNewCourse(@RequestBody @Valid NewCourseDto dto) {
-        LOG.info("Creating new course " + dto);
+        LOG.info(() -> "Creating new course " + dto);
         Course course = new Course(dto.name());
         course.setRewardPerEvent(dto.rewardPerEvent());
         course = courseRepository.saveAndFlush(course);
@@ -65,6 +65,7 @@ public class CourseController {
     @PostMapping(path = "/course/{courseId}/event", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Transactional
     public CourseDto createNewEvent(@PathVariable long courseId, @RequestBody @Valid NewEventDto dto) {
+        LOG.info(() -> "Creating new event " + dto + " in course " + courseId);
         Course course = courseRepository.findById(courseId)
                 .orElseThrow();
         course.addEvent(eventRepository.save(new Event(dto.startTime())));
