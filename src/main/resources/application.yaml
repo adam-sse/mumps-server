@@ -1,0 +1,10 @@
+spring:
+    jpa:
+        database-platform: org.hibernate.community.dialect.SQLiteDialect
+        hibernate:
+            ddl-auto: update
+        open-in-view: false
+    datasource:
+        url: jdbc:sqlite:db.sqlite
+        driver-class-name: org.sqlite.JDBC
+        hikari.maximum-pool-size: 1
