@@ -19,7 +19,7 @@ public class Course {
     
     private String name;
 
-    private User owner;
+    private String owner;
 
     private int rewardPerEvent;
 
@@ -30,7 +30,7 @@ public class Course {
     protected Course() {
     }
     
-    public Course(String name, User owner) {
+    public Course(String name, String owner) {
         this.name = name;
         this.owner = owner;
         this.rewardPerEvent = 1;
@@ -49,11 +49,11 @@ public class Course {
         this.name = name;
     }
 
-    public User getOwner() {
+    public String getOwner() {
         return owner;
     }
 
-    public void setOwnerID(User owner) {
+    public void setOwner(String owner) {
         this.owner = owner;
     }
 

@@ -17,10 +17,10 @@ public class Event {
     
     private ZonedDateTime startTime;
 
-    private List<User> visitors;
+    private List<String> visitors;
     // for JPA
     protected Event() {
-        visitors = new LinkedList<User>();
+        visitors = new LinkedList<>();
     }
     
     public long getId() {
@@ -39,11 +39,11 @@ public class Event {
         this.startTime = startTime;
     }
 
-    public List<User> getVisitors() {
+    public List<String> getVisitors() {
         return visitors;
     }
 
-    public void setVisitors(List<User> visitors) {
+    public void setVisitors(List<String> visitors) {
         this.visitors = visitors;
     }
 }

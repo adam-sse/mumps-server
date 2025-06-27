@@ -74,8 +74,8 @@ public class UserController {
         Event event = eventRepository.findById(courseID).get();
         Course course = courseRepository.findById(eventID).get();
 
-        if (!event.getVisitors().contains(user)) {
-            event.getVisitors().add(user);
+        if (!event.getVisitors().contains(user.getUserID())) {
+            event.getVisitors().add(user.getUserID());
             user.setPoints(user.getPoints() + course.getRewardPerEvent());
 
             event = eventRepository.save(event);

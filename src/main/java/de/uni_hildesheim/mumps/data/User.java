@@ -1,13 +1,11 @@
 package de.uni_hildesheim.mumps.data;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
 @Entity
 public class User implements Serializable {
@@ -21,14 +19,13 @@ public class User implements Serializable {
 
     private int points;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    private List<Course> enlistedCourses; //course id's
+    private List<Long> enlistedCourses; //course id's
 
     protected User() {
-        enlistedCourses = new LinkedList<Course>();
+        enlistedCourses = new LinkedList<>();
     }
 
-    public User(String userID, String eMail, int points, List<Course> enlistedCourses) {
+    public User(String userID, String eMail, int points, List<Long> enlistedCourses) {
         this.userID = userID;
         this.eMail = eMail;
         this.points = points;
@@ -65,11 +62,11 @@ public class User implements Serializable {
         this.points = points;
     }
 
-    public List<Course> getEnlistedCourses() {
+    public List<Long> getEnlistedCourses() {
         return enlistedCourses;
     }
 
-    public void setEnlistedCourses(List<Course> enlistedCourses) {
+    public void setEnlistedCourses(List<Long> enlistedCourses) {
         this.enlistedCourses = enlistedCourses;
     }
 }

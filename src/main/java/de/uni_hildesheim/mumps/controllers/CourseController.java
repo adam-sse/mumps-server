@@ -17,6 +17,7 @@ import de.uni_hildesheim.mumps.data.Course;
 import de.uni_hildesheim.mumps.data.CourseRepository;
 import de.uni_hildesheim.mumps.data.Event;
 import de.uni_hildesheim.mumps.data.EventRepository;
+import de.uni_hildesheim.mumps.data.UserRepository;
 import de.uni_hildesheim.mumps.dto.CourseDto;
 import de.uni_hildesheim.mumps.dto.NewCourseDto;
 import de.uni_hildesheim.mumps.dto.NewEventDto;
@@ -34,6 +35,9 @@ public class CourseController {
     
     @Autowired
     private EventRepository eventRepository;
+    
+    @Autowired
+    private UserRepository userRepository;
     
     @GetMapping("/course")
     public List<CourseDto> getAllCourses() {
@@ -54,6 +58,7 @@ public class CourseController {
     @PostMapping(path = "/course", consumes = MediaType.APPLICATION_JSON_VALUE)
     public CourseDto createNewCourse(@RequestBody @Valid NewCourseDto dto) {
         LOG.info(() -> "Creating new course " + dto);
+        userRepository.findById(dto.owner()).orElseThrow(); // check that user exists
         Course course = new Course(dto.name(), dto.owner());
         course.setRewardPerEvent(dto.rewardPerEvent());
         course = courseRepository.saveAndFlush(course);
