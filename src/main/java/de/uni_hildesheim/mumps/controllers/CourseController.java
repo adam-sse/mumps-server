@@ -8,11 +8,15 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.uni_hildesheim.mumps.data.Course;
 import de.uni_hildesheim.mumps.data.CourseRepository;
 import de.uni_hildesheim.mumps.dto.CourseDto;
+import de.uni_hildesheim.mumps.dto.NewCourseDto;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -38,6 +42,14 @@ public class CourseController {
         return courseRepository.findById(id)
                 .map(CourseDto::new)
                 .orElse(null);
+    }
+    
+    @PostMapping
+    public CourseDto createNewCourse(@Valid NewCourseDto dto) {
+        Course course = new Course(dto.name());
+        course.setRewardPerEvent(dto.rewardPerEvent());
+        course = courseRepository.save(course);
+        return new CourseDto(course);
     }
     
 }
