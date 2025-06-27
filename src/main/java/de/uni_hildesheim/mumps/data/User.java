@@ -1,7 +1,9 @@
 package de.uni_hildesheim.mumps.data;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 import java.util.Set;
 
@@ -13,25 +15,27 @@ public class User {
 
     private String eMail;
 
-    private byte[] loginHash; //hash result to compare to
-
     private boolean isLecturer;
 
     private int points;
 
-    private Set<Long> enlistedCourses; //course id's
+    @OneToMany(fetch = FetchType.LAZY)
+    private Set<Course> enlistedCourses; //course id's
 
     protected User() {
 
     }
 
-    public User(String userID, String eMail, byte[] loginHash, boolean isLecturer, int points, Set<Long> enlistedCourses) {
+    public User(String userID, String eMail, boolean isLecturer, int points, Set<Course> enlistedCourses) {
         this.userID = userID;
         this.eMail = eMail;
-        this.loginHash = loginHash;
         this.isLecturer = isLecturer;
         this.points = points;
         this.enlistedCourses = enlistedCourses;
+    }
+
+    public User(String userID) {
+        this.userID = userID;
     }
 
 
@@ -51,14 +55,6 @@ public class User {
         this.eMail = eMail;
     }
 
-    public byte[] getLoginHash() {
-        return loginHash;
-    }
-
-    public void setLoginHash(byte[] loginHash) {
-        this.loginHash = loginHash;
-    }
-
     public boolean isLecturer() {
         return isLecturer;
     }
@@ -75,11 +71,11 @@ public class User {
         this.points = points;
     }
 
-    public Set<Long> getEnlistedCourses() {
+    public Set<Course> getEnlistedCourses() {
         return enlistedCourses;
     }
 
-    public void setEnlistedCourses(Set<Long> enlistedCourses) {
+    public void setEnlistedCourses(Set<Course> enlistedCourses) {
         this.enlistedCourses = enlistedCourses;
     }
 }
