@@ -20,7 +20,6 @@ import de.uni_hildesheim.mumps.data.EventRepository;
 import de.uni_hildesheim.mumps.dto.CourseDto;
 import de.uni_hildesheim.mumps.dto.NewCourseDto;
 import de.uni_hildesheim.mumps.dto.NewEventDto;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 @RestController
@@ -53,7 +52,6 @@ public class CourseController {
     }
     
     @PostMapping(path = "/course", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Transactional
     public CourseDto createNewCourse(@RequestBody @Valid NewCourseDto dto) {
         LOG.info(() -> "Creating new course " + dto);
         Course course = new Course(dto.name());
@@ -63,7 +61,6 @@ public class CourseController {
     }
     
     @PostMapping(path = "/course/{courseId}/event", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Transactional
     public CourseDto createNewEvent(@PathVariable long courseId, @RequestBody @Valid NewEventDto dto) {
         LOG.info(() -> "Creating new event " + dto + " in course " + courseId);
         Course course = courseRepository.findById(courseId)
