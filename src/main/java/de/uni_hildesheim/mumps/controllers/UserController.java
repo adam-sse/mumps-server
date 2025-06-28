@@ -102,7 +102,7 @@ public class UserController {
         return new UserDto(user);
     }
 
-    @PutMapping("/users/{userID}/enrolled/{courseID}")
+    @GetMapping("/users/{userID}/enrolled/{courseID}")
     public UserDto enrollUserToCourse(@PathVariable String userID, @PathVariable long courseID) {
         LOG.info("/users/" + userID + "/enrolled/" + courseID + " called");
         User user = userRepository.findById(userID).get();
@@ -118,7 +118,7 @@ public class UserController {
         return new UserDto(user);
     }
 
-    @PutMapping("/users/{userID}/enterLottery")
+    @GetMapping("/users/{userID}/enterLottery")
     public UserLotteryEntryDto userEnteredLottery(@PathVariable String userID) {
         LOG.info("lottery entry called");
         User user = userRepository.findById(userID).get();
@@ -147,7 +147,7 @@ public class UserController {
         return new UserLotteryEntryDto(enteredUser.getEnteredUserID(), enteredUser.getLotteryTickets());
     }
 
-    @PutMapping("/users/{userID}/visited/{courseID}/{eventID}")
+    @GetMapping("/users/{userID}/visited/{courseID}/{eventID}")
     public UserDto userVisitedEvent(@PathVariable String userID, @PathVariable long courseID, @PathVariable long eventID){
         LOG.info("/users/" + userID + "/visited/" + courseID + "/" + eventID + " called");
         User user = userRepository.findById(userID).get();
