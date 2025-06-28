@@ -1,0 +1,65 @@
+"/users"
+return List<UserDto> - Liste aller User
+
+"/users/{userID}" - Input: String userID 
+return UserDto - Spezifizierter User.
+
+"/users/leaderboard"
+return List<UserDto> - Liste aller User in absteigender Folge nach points sotiert.
+
+"/users/lotteryResult"
+return LotteryDto - String gewinnerID (noWinner - falls noch nicht gezogen wurde), LocalDateTime - ZeitPunkt (uhrzeit, datum) der Ziehung, boolean isDrawn - true, falls die Lotterie gezogen wurde und momentan für eintragungen geschlossen ist
+
+Post "/users" - Input: Json NewUserDto
+return UserDto - User der gerade erstellt wurde
+ 
+Put "/users/{userID}/enrolled/{courseID}" - Input: userID: String, courseID: long
+return UserDto - Nutzer der sich gerade in einen Kurs eingeschrieben hat. String userID, long courseID
+
+Put "/users/{userID}/enterLottery"  - Input: userID: String
+return UserLotteryEntryDto - Enthält String enteredUserID (userID), int lotterTickets | falls Lotterie geschlossen: userID = entries are closed, lotteryTickets = 0 | falls user nicht gefunden: userID = user not found, lotterTickets = 0
+
+Put "/users/{userID}/visited/{courseID}/{eventID}" - Input: userID: String, courseID: long, eventID: long
+return UserDto - User der ein Event besucht hat
+
+
+
+
+
+Get "/course"
+return List<CourseDto> - Liste aller Kurse
+
+Get "/course/{courseId}"  - Input: courseId: long
+return CourseDto - spezifizierter Kurs
+
+Post "/course" - Input: Json NewCourseDto
+return CourseDto - erstellter Kurs
+
+Post "/course/{courseId}/event" - Input: courseId: long, Json NewEventDto
+return CourseDto - Kurs mit dem neue erstelltem Event.
+
+
+
+UserDto
+String userID, String eMail, int points, List<Long> enlistedCourses (courseID)
+
+NewUserDto
+@NotBlank String userID, String eMail
+
+UserLotteryEntryDto
+String userID, int lotteryTickets
+
+CourseDto
+long id, String name, String owner, int rewardPerEvent, List<EventDto> events
+
+NewCourseDto
+@NotBlank String name, @NotBlank String owner, @Range(min = 1) int rewardPerEvent
+
+EventDto
+long id, ZonedDateTime startTime, List<String> visitors (userID)
+
+NewEventDto
+@NotNull ZonedDateTime startTime
+
+LotteryDto
+String winnerID, LocalDateTime dateTimeOfDraw, boolean isDrawn
