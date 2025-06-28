@@ -1,13 +1,17 @@
 package de.uni_hildesheim.mumps.controllers;
 
+import de.uni_hildesheim.mumps.LotteryMethods;
 import de.uni_hildesheim.mumps.data.*;
+import de.uni_hildesheim.mumps.dto.LotteryDto;
 import de.uni_hildesheim.mumps.dto.NewUserDto;
 import de.uni_hildesheim.mumps.dto.UserDto;
+import de.uni_hildesheim.mumps.dto.UserLotteryEntryDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -26,6 +30,8 @@ public class UserController {
 
     @Autowired
     private EventRepository eventRepository;
+
+    private Lottery lottery;
 
     @GetMapping("/users")
     public List<UserDto> getAllUsers() {
@@ -57,6 +63,33 @@ public class UserController {
         return new LinkedList<>(leaderboard);
     }
 
+    @GetMapping("/users/lotteryResult")
+    public LotteryDto getLotteryResult() {
+        LOG.info("lottery result called");
+        if(lottery == null) {
+            lottery = new Lottery();
+        }
+        LotteryDto dto = new LotteryDto(lottery.getWinnerID(), lottery.getDateTimeOfDraw(), lottery.isDrawn());
+        LocalDateTime now = LocalDateTime.now();
+
+        if (now.isAfter(lottery.getDateTimeOfDraw()) && !lottery.isDrawn()) {
+            lottery.setWinnerID(LotteryMethods.drawLottery(lottery.getUserLotteryEntries()));
+            lottery.setDrawn(true);
+            dto = new LotteryDto(lottery.getWinnerID(), lottery.getDateTimeOfDraw(), lottery.isDrawn());
+        }
+
+        if (lottery.isDrawn() && lottery.getDateTimeOfDraw().isAfter(lottery.getDateTimeOfDraw().plusDays(7))) {
+            lottery.setDateTimeOfDraw(now.plusMonths(1));
+            lottery.setUserLotteryEntries(new LinkedList<>());
+            lottery.setDrawn(false);
+            lottery.setWinnerID("noWinner");
+
+            dto = new LotteryDto(lottery.getWinnerID(), lottery.getDateTimeOfDraw(), lottery.isDrawn());
+        }
+
+        return dto;
+    }
+
     @PostMapping(path = "/users", consumes = MediaType.APPLICATION_JSON_VALUE)
     public UserDto createNewUser(@RequestBody @Valid NewUserDto dto) {
         LOG.info("New User created");
@@ -85,10 +118,34 @@ public class UserController {
         return new UserDto(user);
     }
 
-    /*@PutMapping("/users/{userID}/enterLottery")
-    public UserDto userEnteredLottery(PathVariable String userID) {
+    @PutMapping("/users/{userID}/enterLottery")
+    public UserLotteryEntryDto userEnteredLottery(@PathVariable String userID) {
+        LOG.info("lottery entry called");
+        User user = userRepository.findById(userID).get();
+        UserLotteryEntry enteredUser = null;
 
-    }*/
+        if (!lottery.isDrawn()) {
+            for (int i = 0; i < lottery.getUserLotteryEntries().size(); i++) {
+                enteredUser = lottery.getUserLotteryEntries().get(i);
+                if (enteredUser.getEnteredUserID().equals(userID)) {
+                    while (user.getPoints() >= lottery.getLotteryPrice()) {
+                        user.setPoints(user.getPoints() - lottery.getLotteryPrice());
+                        enteredUser.setLotteryTickets(enteredUser.getLotteryTickets() + 1);
+                        LOG.info("User entered lottery");
+                    }
+                }
+            }
+        } else {
+            enteredUser = new UserLotteryEntry("entries are closed", 0);
+        }
+        userRepository.saveAndFlush(user);
+
+        if(enteredUser == null) {
+            enteredUser = new UserLotteryEntry("user not found", 0);
+        }
+
+        return new UserLotteryEntryDto(enteredUser.getEnteredUserID(), enteredUser.getLotteryTickets());
+    }
 
     @PutMapping("/users/{userID}/visited/{courseID}/{eventID}")
     public UserDto userVisitedEvent(@PathVariable String userID, @PathVariable long courseID, @PathVariable long eventID){
