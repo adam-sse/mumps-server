@@ -1,13 +1,13 @@
-"/users"
+Get "/users"
 return List<UserDto> - Liste aller User
 
-"/users/{userID}" - Input: String userID 
+Get "/users/{userID}" - Input: String userID 
 return UserDto - Spezifizierter User.
 
-"/users/leaderboard"
+Get "/users/leaderboard"
 return List<UserDto> - Liste aller User in absteigender Folge nach points sotiert.
 
-"/users/lotteryResult"
+Get "/users/lotteryResult"
 return LotteryDto - String gewinnerID (noWinner - falls noch nicht gezogen wurde), LocalDateTime - ZeitPunkt (uhrzeit, datum) der Ziehung, boolean isDrawn - true, falls die Lotterie gezogen wurde und momentan für eintragungen geschlossen ist
 
 Post "/users" - Input: Json NewUserDto
@@ -17,7 +17,7 @@ Put "/users/{userID}/enrolled/{courseID}" - Input: userID: String, courseID: lon
 return UserDto - Nutzer der sich gerade in einen Kurs eingeschrieben hat. String userID, long courseID
 
 Put "/users/{userID}/enterLottery"  - Input: userID: String
-return UserLotteryEntryDto - Enthält String enteredUserID (userID), int lotterTickets | falls Lotterie geschlossen: userID = entries are closed, lotteryTickets = 0 | falls user nicht gefunden: userID = user not found, lotterTickets = 0
+return UserLotteryEntryDto - | falls Lotterie geschlossen: userID = entries are closed, lotteryTickets = 0 | falls user nicht gefunden: userID = user not found, lotterTickets = 0
 
 Put "/users/{userID}/visited/{courseID}/{eventID}" - Input: userID: String, courseID: long, eventID: long
 return UserDto - User der ein Event besucht hat
